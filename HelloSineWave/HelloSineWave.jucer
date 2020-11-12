@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="wLf88K" name="HelloSineWave" projectType="guiapp" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+  <MAINGROUP id="aqrnvK" name="HelloSineWave">
+    <GROUP id="{277AA249-BB4A-7186-2E57-B0AEFA1FBA56}" name="Source">
+      <FILE id="rA4oB6" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="Ryh2O0" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="HacFrm" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+  <EXPORTFORMATS>
+    <ANDROIDSTUDIO targetFolder="Builds/Android">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="HelloSineWave"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="HelloSineWave"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+      </MODULEPATHS>
+    </ANDROIDSTUDIO>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="HelloSineWave"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="HelloSineWave"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+    <VS2017 targetFolder="Builds/VisualStudio2017">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="HelloSineWave"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="HelloSineWave"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+      </MODULEPATHS>
+    </VS2017>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="HelloSineWave"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="HelloSineWave"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+      </MODULEPATHS>
+    </VS2019>
+    <XCODE_IPHONE targetFolder="Builds/iOS">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="HelloSineWave"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="HelloSineWave"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+      </MODULEPATHS>
+    </XCODE_IPHONE>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="HelloSineWave"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="HelloSineWave"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../SDKs/juce-framework/JUCE_547/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+</JUCERPROJECT>
