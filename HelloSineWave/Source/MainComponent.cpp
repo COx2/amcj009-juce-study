@@ -131,16 +131,16 @@ void MainComponent::paint (juce::Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
-    auto bounds = getLocalBounds();
+    const auto bounds = getLocalBounds();
 
     // Draw text
-    juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.05f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
+    const juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.05f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
     g.setColour(juce::Colours::white);
     g.setFont(24.0f);
     g.drawFittedText("Hello, sine wave", textArea.toNearestInt(), juce::Justification::centred, 1);
 
     // Draw wave shape background
-    juce::Rectangle<float> drawArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.6f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.3f };
+    const juce::Rectangle<float> drawArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.6f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.3f };
     g.setColour(juce::Colours::darkgrey);
     g.fillRect(drawArea);
 
@@ -152,7 +152,7 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    auto bounds = getLocalBounds();
+    const auto bounds = getLocalBounds();
 
     const int slider_w = bounds.getWidth() * 0.3f;
     const int slider_h = bounds.getHeight() * 0.3f;
