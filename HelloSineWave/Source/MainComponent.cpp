@@ -25,10 +25,12 @@ MainComponent::MainComponent()
     }
 
     sliderGain->setRange(0.0, 1.0);
+    sliderGain->setNumDecimalPlacesToDisplay(2);
     sliderGain->setValue(0.5);
     addAndMakeVisible(sliderGain.get());
     
     sliderFrequency->setRange(20.0, 2000.0);
+    sliderFrequency->setNumDecimalPlacesToDisplay(0);
     sliderFrequency->setValue(440.0);
     addAndMakeVisible(sliderFrequency.get());
     
