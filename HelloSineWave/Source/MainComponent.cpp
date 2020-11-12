@@ -34,6 +34,7 @@ MainComponent::MainComponent()
     
     comboboxOscillator->addItemList(oscillatorTypes, 1);
     comboboxOscillator->setSelectedItemIndex(0);
+    comboboxOscillator->setJustificationType(juce::Justification::centred);
     addAndMakeVisible(comboboxOscillator.get());
 
     startTimerHz(30);
