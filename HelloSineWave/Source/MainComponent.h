@@ -112,7 +112,7 @@ private:
 
     // Values for use in signal process
     float gain{ 0.5f };
-    float frequency{ 1.0f };
+    float frequency{ 440.0f };
     float lastPhase{ 0.0f };
     double currentSampleRate{ 0.0 };
 
