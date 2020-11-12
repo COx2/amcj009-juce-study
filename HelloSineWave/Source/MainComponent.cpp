@@ -43,26 +43,25 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-
-    // For more details, see the help for AudioProcessor::prepareToPlay()
+    currentSampleRate = sampleRate;
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
+    // Get parameter value
     gain = gainSlider->getValue();
     pitch = pitchSlider->getValue();
 
+    // Clear buffer
     bufferToFill.clearActiveBufferRegion();
     auto* buffer = bufferToFill.buffer;
 
+    // Calculate phase delta for wanted frequency
     float phase = 0.0f;
-    const float phase_delta = juce::MathConstants<float>::twoPi / buffer->getNumSamples() * pitch;
+    const auto base_rad = juce::MathConstants<float>::twoPi / currentSampleRate;
+    const float phase_delta = base_rad * baseFrequency * pitch;
 
+    // Render audio data
     for (int channel = 0; channel < buffer->getNumChannels(); ++channel)
     {
         float* channelData = buffer->getWritePointer(channel);
@@ -74,7 +73,11 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
             if (phase > juce::MathConstants<float>::twoPi)
                 phase -= juce::MathConstants<float>::twoPi;
 
+            // Render sine wave
             channelData[sample] = sinf(phase) * gain;
+
+            // If uncommented out below, will render square wave
+            //channelData[sample] = copysignf(1.0f, sinf(phase)) * gain;
         }
     }
     lastPhase = phase;
