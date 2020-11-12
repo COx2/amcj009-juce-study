@@ -3,7 +3,7 @@
 //==============================================================================
 MainComponent::MainComponent()
     : gainSlider(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
-    , pitchSlider(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
+    , frequencySlider(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
     , waveSampleCollector(waveDrawBuffer)
 {
     // Make sure you set the size of the component after
@@ -24,12 +24,12 @@ MainComponent::MainComponent()
     }
 
     gainSlider->setRange(0.0, 1.0);
-    gainSlider->setValue(0.5f);
+    gainSlider->setValue(0.5);
     addAndMakeVisible(gainSlider.get());
     
-    pitchSlider->setRange(0.1, 10.0);
-    pitchSlider->setValue(1.0f);
-    addAndMakeVisible(pitchSlider.get());
+    frequencySlider->setRange(20.0, 2000.0);
+    frequencySlider->setValue(440.0);
+    addAndMakeVisible(frequencySlider.get());
 
     startTimerHz(30);
 }
@@ -50,7 +50,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 {
     // Get parameter value
     gain = gainSlider->getValue();
-    pitch = pitchSlider->getValue();
+    frequency = frequencySlider->getValue();
 
     // Clear buffer
     bufferToFill.clearActiveBufferRegion();
@@ -59,7 +59,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     // Calculate phase delta for wanted frequency
     float phase = 0.0f;
     const auto base_rad = juce::MathConstants<float>::twoPi / currentSampleRate;
-    const float phase_delta = base_rad * baseFrequency * pitch;
+    const float phase_delta = base_rad * frequency;
 
     // Render audio data
     for (int channel = 0; channel < buffer->getNumChannels(); ++channel)
@@ -147,8 +147,8 @@ void MainComponent::resized()
     gainSlider->setSize(slider_w, slider_h);
     gainSlider->setCentrePosition(bounds.getWidth() * 0.25f, bounds.getHeight() * 0.3f);
 
-    pitchSlider->setSize(slider_w, slider_h);
-    pitchSlider->setCentrePosition(bounds.getWidth() * 0.75f, bounds.getHeight() * 0.3f);
+    frequencySlider->setSize(slider_w, slider_h);
+    frequencySlider->setCentrePosition(bounds.getWidth() * 0.75f, bounds.getHeight() * 0.3f);
 }
 
 void MainComponent::timerCallback()

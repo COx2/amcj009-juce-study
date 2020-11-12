@@ -112,14 +112,13 @@ private:
 
     // Values for use in signal process
     float gain{ 0.5f };
-    float pitch{ 1.0f };
+    float frequency{ 1.0f };
     float lastPhase{ 0.0f };
     double currentSampleRate{ 0.0 };
-    const float baseFrequency{ 440.0f };
 
     // GUI components
     std::unique_ptr<juce::Slider> gainSlider;
-    std::unique_ptr<juce::Slider> pitchSlider;
+    std::unique_ptr<juce::Slider> frequencySlider;
 
     // Wave shape visualiser
     WaveDrawBuffer waveDrawBuffer;
