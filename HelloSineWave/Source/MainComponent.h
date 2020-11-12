@@ -36,9 +36,16 @@ public:
         {
             juce::FloatVectorOperations::copy(outputBuffer, bufferToDraw.getReadPointer(start1), numSamples);
             lastReadPointer = start1;
+            resetCount = 0;
         }
         else
+        {
+            resetCount++;
+            if (resetCount > resetThreshold)
+                bufferToDraw.clear();
+
             juce::FloatVectorOperations::copy(outputBuffer, bufferToDraw.getReadPointer(lastReadPointer), numSamples);
+        }
 
         abstractFifo.finishedRead(size1);
     }
@@ -52,6 +59,8 @@ private:
     const int numBuffers{ 5 };
     const int bufferSize{ 1024 };
     int lastReadPointer{ 0 };
+    const int resetThreshold{ 30 };
+    int resetCount{ 0 };
     juce::AbstractFifo abstractFifo{ numBuffers };
     juce::AudioBuffer<float> bufferToDraw{ numBuffers, bufferSize };
 };
