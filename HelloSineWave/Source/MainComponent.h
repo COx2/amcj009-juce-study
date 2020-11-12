@@ -29,6 +29,8 @@ private:
     float pitch{ 1.0f };
     float lastPhase{ 0.0f };
 
+    std::unique_ptr<juce::Slider> gainSlider;
+    std::unique_ptr<juce::Slider> pitchSlider;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

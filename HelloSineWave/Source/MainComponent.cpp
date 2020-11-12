@@ -2,6 +2,8 @@
 
 //==============================================================================
 MainComponent::MainComponent()
+    : gainSlider(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
+    , pitchSlider(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
 {
     // Make sure you set the size of the component after
     // you add any child components.
@@ -19,6 +21,12 @@ MainComponent::MainComponent()
         // Specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
     }
+
+    gainSlider->setRange(0.0, 1.0);
+    addAndMakeVisible(gainSlider.get());
+    
+    pitchSlider->setRange(0.1, 10.0);
+    addAndMakeVisible(pitchSlider.get());
 }
 
 MainComponent::~MainComponent()
@@ -41,6 +49,9 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
+    gain = gainSlider->getValue();
+    pitch = pitchSlider->getValue();
+
     bufferToFill.clearActiveBufferRegion();
     auto* buffer = bufferToFill.buffer;
 
@@ -83,7 +94,15 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    // This is called when the MainContentComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+    auto bounds = getLocalBounds();
+
+    const int slider_w = bounds.getWidth() * 0.3f;
+    const int slider_h = bounds.getHeight() * 0.3f;
+
+    gainSlider->setSize(slider_w, slider_h);
+    gainSlider->setCentrePosition(bounds.getWidth() * 0.25f, bounds.getHeight() * 0.5f);
+
+    pitchSlider->setSize(slider_w, slider_h);
+    pitchSlider->setCentrePosition(bounds.getWidth() * 0.75f, bounds.getHeight() * 0.5f);
 }
+
