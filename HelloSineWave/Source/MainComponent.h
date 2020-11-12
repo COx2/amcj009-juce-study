@@ -6,6 +6,11 @@
 class WaveDrawBuffer
 {
 public:
+    WaveDrawBuffer()
+    {
+        bufferToDraw.clear();
+    }
+
     void push(const float* dataToPush, int numSamples)
     {
         jassert(numSamples <= bufferToDraw.getNumSamples());
