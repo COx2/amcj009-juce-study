@@ -112,9 +112,11 @@ private:
 
     // Values for use in signal process
     float gain{ 0.5f };
+    float lastGain{ 0.0f };
     float frequency{ 440.0f };
     float lastPhase{ 0.0f };
     double currentSampleRate{ 0.0 };
+    juce::Random random;
 
     // GUI components
     std::unique_ptr<juce::Slider> gainSlider;

@@ -49,8 +49,8 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     // Get parameter value
-    gain = gainSlider->getValue();
-    frequency = frequencySlider->getValue();
+    gain = (float)gainSlider->getValue();
+    frequency = (float)frequencySlider->getValue();
 
     // Clear buffer
     bufferToFill.clearActiveBufferRegion();
@@ -58,7 +58,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
     // Calculate phase delta for wanted frequency
     float phase = 0.0f;
-    const auto base_rad = juce::MathConstants<float>::twoPi / currentSampleRate;
+    const float base_rad = juce::MathConstants<float>::twoPi / (float)currentSampleRate;
     const float phase_delta = base_rad * frequency;
 
     // Render audio data
@@ -74,13 +74,26 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
                 phase -= juce::MathConstants<float>::twoPi;
 
             // Render sine wave
-            channelData[sample] = sinf(phase) * gain;
+            channelData[sample] = sinf(phase);
 
             // If uncommented out below, will render square wave
-            //channelData[sample] = copysignf(1.0f, sinf(phase)) * gain;
+            //channelData[sample] = copysignf(1.0f, sinf(phase));
+
+            // If uncommented out below, will render triangle wave
+            //channelData[sample] = (acos(cos(phase)) / juce::MathConstants<float>::pi - 0.5f) * 2.0f;
+
+            // If uncommented out below, will render saw wave
+            //channelData[sample] = juce::jmap<float>(phase, 0.0f, juce::MathConstants<float>::twoPi, -1.0f, 1.0f);
+
+            // If uncommented out below, will render white noise
+            //channelData[sample] = juce::jmap<float>(random.nextFloat(), -1.0f, 1.0f);
         }
     }
     lastPhase = phase;
+
+    // Apply gain
+    buffer->applyGainRamp(0, buffer->getNumSamples(), lastGain, gain);
+    lastGain = gain;
 
     // Collect wave sample
     waveSampleCollector.process(buffer->getReadPointer(0), buffer->getNumSamples());
