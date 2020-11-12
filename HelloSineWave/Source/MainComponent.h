@@ -25,7 +25,9 @@ public:
 
 private:
     //==============================================================================
-    // Your private member variables go here...
+    float gain{ 0.5f };
+    float pitch{ 1.0f };
+    float lastPhase{ 0.0f };
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
