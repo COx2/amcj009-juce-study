@@ -11,7 +11,7 @@ public:
         bufferToDraw.clear();
     }
 
-    void push(const float* dataToPush, int numSamples)
+    void push(const float* dataToPush, const int numSamples)
     {
         jassert(numSamples <= bufferToDraw.getNumSamples());
 
@@ -25,7 +25,7 @@ public:
         abstractFifo.finishedWrite(size1);
     }
 
-    void pop(float* outputBuffer, int numSamples)
+    void pop(float* outputBuffer, const int numSamples)
     {
         jassert(numSamples <= bufferToDraw.getNumSamples());
 
@@ -65,7 +65,7 @@ public:
         sampleCollecion.setSize(1, drawBuffer.getBufferSize());
     }
 
-    void process(const float* samples, int numSamples)
+    void process(const float* samples, const int numSamples)
     {
         int index = 0;
         while (index++ < numSamples)
@@ -82,7 +82,7 @@ public:
 private:
     WaveDrawBuffer& drawBuffer;
     juce::AudioBuffer<float> sampleCollecion;
-    int numCollected{0};
+    int numCollected{ 0 };
 };
 
 //==============================================================================
@@ -110,13 +110,16 @@ private:
     //==============================================================================
     virtual void timerCallback() override;
 
+    // Values for use in signal process
     float gain{ 0.5f };
     float pitch{ 1.0f };
     float lastPhase{ 0.0f };
 
+    // GUI components
     std::unique_ptr<juce::Slider> gainSlider;
     std::unique_ptr<juce::Slider> pitchSlider;
 
+    // Wave shape visualiser
     WaveDrawBuffer waveDrawBuffer;
     WaveSampleCollector waveSampleCollector;
 
