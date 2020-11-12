@@ -36,8 +36,6 @@ public:
             juce::FloatVectorOperations::copy(outputBuffer, bufferToDraw.getReadPointer(lastReadPointer), numSamples);
 
         abstractFifo.finishedRead(size1);
-
-
     }
 
     int getBufferSize() const
@@ -77,9 +75,9 @@ public:
     }
 
 private:
+    WaveDrawBuffer& drawBuffer;
     juce::AudioBuffer<float> sampleCollecion;
     int numCollected{0};
-    WaveDrawBuffer& drawBuffer;
 };
 
 //==============================================================================
