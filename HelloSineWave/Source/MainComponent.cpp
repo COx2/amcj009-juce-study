@@ -60,7 +60,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     bufferToFill.clearActiveBufferRegion();
     auto* buffer = bufferToFill.buffer;
 
-    float phase;
+    float phase = 0.0f;
     const float phase_delta = juce::MathConstants<float>::twoPi / buffer->getNumSamples() * pitch;
 
     for (int channel = 0; channel < buffer->getNumChannels(); ++channel)
@@ -79,6 +79,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     }
     lastPhase = phase;
 
+    // Collect wave sample
     waveSampleCollector.process(buffer->getReadPointer(0), buffer->getNumSamples());
 }
 
@@ -93,9 +94,6 @@ void MainComponent::releaseResources()
 //==============================================================================
 void drawWaveShape(juce::Graphics& g, const juce::Rectangle<float>& drawArea, const float* plotData, const int numSamples)
 {
-    const auto w = drawArea.getWidth();
-    const auto h = drawArea.getHeight();
-
     juce::Path wavePath;
     const float x0 = drawArea.getX();
     const float cloped_sample0 = juce::jmax<float>(-1.0f, juce::jmin<float>(1.0f, plotData[0]));
@@ -104,7 +102,7 @@ void drawWaveShape(juce::Graphics& g, const juce::Rectangle<float>& drawArea, co
 
     for (int i = 1; i < numSamples; ++i)
     {
-        const float x = juce::jmap<float>(i, 0, numSamples, x0, x0 + w);
+        const float x = juce::jmap<float>(i, 0, numSamples, x0, x0 + drawArea.getWidth());
         const float cloped_sample = juce::jmax<float>(-1.0f, juce::jmin<float>(1.0f, plotData[i]));
         const float y = juce::jmap<float>(cloped_sample, -1.0f, 1.0f, drawArea.getBottom(), drawArea.getY());
         wavePath.lineTo(x, y);
@@ -119,11 +117,13 @@ void MainComponent::paint (juce::Graphics& g)
 
     auto bounds = getLocalBounds();
 
+    // Draw text
     juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.05f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
     g.setColour(juce::Colours::white);
     g.setFont(24.0f);
     g.drawFittedText("Hello, sine wave", textArea.toNearestInt(), juce::Justification::centred, 1);
 
+    // Draw wave shape background
     juce::Rectangle<float> drawArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.6f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.3f };
     g.setColour(juce::Colours::darkgrey);
     g.fillRect(drawArea);
