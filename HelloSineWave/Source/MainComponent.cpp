@@ -2,8 +2,9 @@
 
 //==============================================================================
 MainComponent::MainComponent()
-    : gainSlider(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
-    , frequencySlider(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
+    : sliderGain(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
+    , sliderFrequency(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
+    , comboboxOscillator(std::make_unique<juce::ComboBox>())
     , waveSampleCollector(waveDrawBuffer)
 {
     // Make sure you set the size of the component after
@@ -23,13 +24,17 @@ MainComponent::MainComponent()
         setAudioChannels (2, 2);
     }
 
-    gainSlider->setRange(0.0, 1.0);
-    gainSlider->setValue(0.5);
-    addAndMakeVisible(gainSlider.get());
+    sliderGain->setRange(0.0, 1.0);
+    sliderGain->setValue(0.5);
+    addAndMakeVisible(sliderGain.get());
     
-    frequencySlider->setRange(20.0, 2000.0);
-    frequencySlider->setValue(440.0);
-    addAndMakeVisible(frequencySlider.get());
+    sliderFrequency->setRange(20.0, 2000.0);
+    sliderFrequency->setValue(440.0);
+    addAndMakeVisible(sliderFrequency.get());
+    
+    comboboxOscillator->addItemList(oscillatorTypes, 1);
+    comboboxOscillator->setSelectedItemIndex(0);
+    addAndMakeVisible(comboboxOscillator.get());
 
     startTimerHz(30);
 }
@@ -49,8 +54,9 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     // Get parameter value
-    gain = (float)gainSlider->getValue();
-    frequency = (float)frequencySlider->getValue();
+    gain = (float)sliderGain->getValue();
+    frequency = (float)sliderFrequency->getValue();
+    oscillator = (OscillatorType)comboboxOscillator->getSelectedItemIndex();
 
     // Clear buffer
     bufferToFill.clearActiveBufferRegion();
@@ -74,19 +80,26 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
                 phase -= juce::MathConstants<float>::twoPi;
 
             // Render sine wave
-            channelData[sample] = sinf(phase);
-
-            // If uncommented out below, will render square wave
-            //channelData[sample] = copysignf(1.0f, sinf(phase));
-
-            // If uncommented out below, will render triangle wave
-            //channelData[sample] = (acos(cos(phase)) / juce::MathConstants<float>::pi - 0.5f) * 2.0f;
-
-            // If uncommented out below, will render saw wave
-            //channelData[sample] = juce::jmap<float>(phase, 0.0f, juce::MathConstants<float>::twoPi, -1.0f, 1.0f);
-
-            // If uncommented out below, will render white noise
-            //channelData[sample] = juce::jmap<float>(random.nextFloat(), -1.0f, 1.0f);
+            switch (oscillator)
+            {
+            case kSine:
+                channelData[sample] = sinf(phase);
+                break;
+            case kSquare:
+                channelData[sample] = copysignf(1.0f, sinf(phase));
+                break;
+            case kTriangle:
+                channelData[sample] = (acos(cos(phase)) / juce::MathConstants<float>::pi - 0.5f) * 2.0f;
+                break;
+            case kSaw:
+                channelData[sample] = juce::jmap<float>(phase, 0.0f, juce::MathConstants<float>::twoPi, -1.0f, 1.0f);
+                break;
+            case kNoise:
+                channelData[sample] = juce::jmap<float>(random.nextFloat(), -1.0f, 1.0f);
+                break;
+            default:
+                break;
+            }
         }
     }
     lastPhase = phase;
@@ -137,7 +150,7 @@ void MainComponent::paint (juce::Graphics& g)
     const juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.05f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
     g.setColour(juce::Colours::white);
     g.setFont(24.0f);
-    g.drawFittedText("Hello, sine wave", textArea.toNearestInt(), juce::Justification::centred, 1);
+    g.drawFittedText("Hello Audio Programming", textArea.toNearestInt(), juce::Justification::centred, 1);
 
     // Draw wave shape background
     const juce::Rectangle<float> drawArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.6f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.3f };
@@ -156,12 +169,17 @@ void MainComponent::resized()
 
     const int slider_w = bounds.getWidth() * 0.3f;
     const int slider_h = bounds.getHeight() * 0.3f;
+    const int combobox_w = bounds.getWidth() * 0.2f;
+    const int combobox_h = bounds.getHeight() * 0.1f;
 
-    gainSlider->setSize(slider_w, slider_h);
-    gainSlider->setCentrePosition(bounds.getWidth() * 0.25f, bounds.getHeight() * 0.3f);
+    sliderGain->setSize(slider_w, slider_h);
+    sliderGain->setCentrePosition(bounds.getWidth() * 0.2f, bounds.getHeight() * 0.3f);
 
-    frequencySlider->setSize(slider_w, slider_h);
-    frequencySlider->setCentrePosition(bounds.getWidth() * 0.75f, bounds.getHeight() * 0.3f);
+    sliderFrequency->setSize(slider_w, slider_h);
+    sliderFrequency->setCentrePosition(bounds.getWidth() * 0.8f, bounds.getHeight() * 0.3f);
+
+    comboboxOscillator->setSize(combobox_w, combobox_h);
+    comboboxOscillator->setCentrePosition(bounds.getWidth() * 0.5f, bounds.getHeight() * 0.3f);
 }
 
 void MainComponent::timerCallback()

@@ -110,6 +110,17 @@ private:
     //==============================================================================
     virtual void timerCallback() override;
 
+    enum OscillatorType
+    {
+        kUnknown = -1,
+        kSine = 0,
+        kSquare,
+        kTriangle,
+        kSaw,
+        kNoise
+    };
+    const juce::StringArray oscillatorTypes{ "Sine", "Square", "Triangle", "Saw", "Noise" };
+
     // Values for use in signal process
     float gain{ 0.5f };
     float lastGain{ 0.0f };
@@ -117,12 +128,14 @@ private:
     float lastPhase{ 0.0f };
     double currentSampleRate{ 0.0 };
     juce::Random random;
+    OscillatorType oscillator;
 
     // GUI components
-    std::unique_ptr<juce::Slider> gainSlider;
-    std::unique_ptr<juce::Slider> frequencySlider;
+    std::unique_ptr<juce::Slider> sliderGain;
+    std::unique_ptr<juce::Slider> sliderFrequency;
+    std::unique_ptr<juce::ComboBox> comboboxOscillator;
 
-    // Wave shape visualiser
+    // Wave shape visualizer
     WaveDrawBuffer waveDrawBuffer;
     WaveSampleCollector waveSampleCollector;
 
