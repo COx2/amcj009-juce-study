@@ -9,6 +9,15 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+juce::AudioProcessorValueTreeState::ParameterLayout HelloAudioPluginAudioProcessor::createParameterLayout() const
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Gain", "Gain", juce::NormalisableRange<float>{ 0.0f, 1.0f, 0.01f }, 0.5f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Frequency", "Frequency", juce::NormalisableRange<float>{ 20.0f, 2000.0f, 1.0f }, 440.0f));
+    layout.add(std::make_unique<juce::AudioParameterChoice>("Oscillator", "Oscillator", oscillatorTypes, 0));
+    return layout;
+}
+
 //==============================================================================
 HelloAudioPluginAudioProcessor::HelloAudioPluginAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -21,6 +30,8 @@ HelloAudioPluginAudioProcessor::HelloAudioPluginAudioProcessor()
                      #endif
                        )
 #endif
+    , apvts(*this, nullptr, "PARAMETERS", createParameterLayout())
+    , waveSampleCollector(waveDrawBuffer)
 {
 }
 
@@ -133,27 +144,73 @@ void HelloAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+    const auto* freq_param = apvts.getParameter("Frequency");
+    const float frequency = freq_param->getNormalisableRange().convertFrom0to1(freq_param->getValue());
 
-        // ..do something to the data...
+    const auto* osc_param = apvts.getParameter("Oscillator");
+    const OscillatorType oscillator = (OscillatorType)osc_param->getNormalisableRange().convertFrom0to1(osc_param->getValue());
+
+    // Calculate phase delta for wanted frequency
+    float phase = 0.0f;
+    const float base_rad = juce::MathConstants<float>::twoPi / (float)getSampleRate();
+    const float phase_delta = base_rad * frequency;
+
+    // Render audio data
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+        float* channelData = buffer.getWritePointer(channel);
+        phase = lastPhase;
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            phase += phase_delta;
+
+            if (phase > juce::MathConstants<float>::twoPi)
+                phase -= juce::MathConstants<float>::twoPi;
+
+            // Render sine wave
+            switch (oscillator)
+            {
+            case kSine:
+                channelData[sample] = sinf(phase);
+                break;
+            case kSquare:
+                channelData[sample] = copysignf(1.0f, sinf(phase));
+                break;
+            case kTriangle:
+                channelData[sample] = (acos(cos(phase)) / juce::MathConstants<float>::pi - 0.5f) * 2.0f;
+                break;
+            case kSaw:
+                channelData[sample] = juce::jmap<float>(phase, 0.0f, juce::MathConstants<float>::twoPi, -1.0f, 1.0f);
+                break;
+            case kNoise:
+                channelData[sample] = juce::jmap<float>(random.nextFloat(), -1.0f, 1.0f);
+                break;
+            default:
+                break;
+            }
+        }
     }
+    lastPhase = phase;
+
+    // Apply gain
+    const auto* gain_param = apvts.getParameter("Gain");
+    const float gain = gain_param->getNormalisableRange().convertFrom0to1(gain_param->getValue());
+    buffer.applyGainRamp(0, buffer.getNumSamples(), lastGain, gain);
+    lastGain = gain;
+
+    // Collect wave sample
+    waveSampleCollector.process(buffer.getReadPointer(0), buffer.getNumSamples());
+}
+
+void HelloAudioPluginAudioProcessor::processBlockBypassed(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+{
+    juce::AudioProcessor::processBlockBypassed(buffer, midiMessages);
+
+    // Collect wave sample
+    waveSampleCollector.process(buffer.getReadPointer(0), buffer.getNumSamples());
 }
 
 //==============================================================================
