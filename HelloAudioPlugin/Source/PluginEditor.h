@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class HelloAudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor
+class HelloAudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Timer
 {
 public:
     HelloAudioPluginAudioProcessorEditor (HelloAudioPluginAudioProcessor&);
@@ -25,13 +25,17 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    //==============================================================================
+    virtual void timerCallback() override;
+
     HelloAudioPluginAudioProcessor& audioProcessor;
 
     std::unique_ptr<juce::Slider> sliderGain;
+    std::unique_ptr<juce::Slider> sliderFrequency;
+    std::unique_ptr<juce::ComboBox> comboboxOscillator;
 
-    juce::OwnedArray<juce::SliderParameterAttachment> sliderAttachments;
+    juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachments;
+    juce::OwnedArray<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboboxAttachments;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HelloAudioPluginAudioProcessorEditor)
 };
