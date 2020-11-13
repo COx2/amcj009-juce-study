@@ -5,6 +5,9 @@ MainComponent::MainComponent()
     : sliderGain(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
     , sliderFrequency(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
     , comboboxOscillator(std::make_unique<juce::ComboBox>())
+    , labelGain(std::make_unique<juce::Label>("Gain", "GAIN"))
+    , labelFrequency(std::make_unique<juce::Label>("Frequency", "FREQ"))
+    , labelOscillator(std::make_unique<juce::Label>("Oscillator", "OSC"))
     , waveSampleCollector(waveDrawBuffer)
 {
     // Make sure you set the size of the component after
@@ -24,16 +27,25 @@ MainComponent::MainComponent()
         setAudioChannels (2, 2);
     }
 
+    labelGain->attachToComponent(sliderGain.get(), false);
+    labelGain->setJustificationType(juce::Justification::centred);
+
     sliderGain->setRange(0.0, 1.0);
     sliderGain->setNumDecimalPlacesToDisplay(2);
     sliderGain->setValue(0.5);
     addAndMakeVisible(sliderGain.get());
-    
+
+    labelFrequency->attachToComponent(sliderFrequency.get(), false);
+    labelFrequency->setJustificationType(juce::Justification::centred);
+
     sliderFrequency->setRange(20.0, 2000.0);
     sliderFrequency->setNumDecimalPlacesToDisplay(0);
     sliderFrequency->setValue(440.0);
     addAndMakeVisible(sliderFrequency.get());
-    
+
+    labelOscillator->attachToComponent(comboboxOscillator.get(), false);
+    labelOscillator->setJustificationType(juce::Justification::centred);
+
     comboboxOscillator->addItemList(oscillatorTypes, 1);
     comboboxOscillator->setSelectedItemIndex(0);
     comboboxOscillator->setJustificationType(juce::Justification::centred);
@@ -150,7 +162,7 @@ void MainComponent::paint (juce::Graphics& g)
     const auto bounds = getLocalBounds();
 
     // Draw text
-    const juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.05f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
+    const juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.02f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
     g.setColour(juce::Colours::white);
     g.setFont(24.0f);
     g.drawFittedText("Hello Audio Programming", textArea.toNearestInt(), juce::Justification::centred, 1);
