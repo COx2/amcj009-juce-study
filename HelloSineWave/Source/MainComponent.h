@@ -161,9 +161,10 @@ private:
         kTriangle,
         kSaw,
         kNoise,
+        kMute,
         kBypass
     };
-    const juce::StringArray oscillatorTypes{ "Sine", "Square", "Triangle", "Saw", "Noise", "Bypass" };
+    const juce::StringArray oscillatorTypes{ "Sine", "Square", "Triangle", "Saw", "Noise", "Mute", "Bypass" };
 
     // Values for use in signal process
     float gain{ 0.5f };

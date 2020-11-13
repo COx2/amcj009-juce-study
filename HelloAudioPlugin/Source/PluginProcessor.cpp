@@ -188,6 +188,9 @@ void HelloAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             case kNoise:
                 channelData[sample] = juce::jmap<float>(random.nextFloat(), -1.0f, 1.0f);
                 break;
+            case kMute:
+                channelData[sample] = 0.0f;
+                break;
             case kBypass:
                 break;
             default:
