@@ -195,9 +195,10 @@ private:
         kSquare,
         kTriangle,
         kSaw,
-        kNoise
+        kNoise,
+        kBypass
     };
-    const juce::StringArray oscillatorTypes{ "Sine", "Square", "Triangle", "Saw", "Noise" };
+    const juce::StringArray oscillatorTypes{ "Sine", "Square", "Triangle", "Saw", "Noise", "Bypass" };
 
     juce::AudioProcessorValueTreeState apvts;
 
