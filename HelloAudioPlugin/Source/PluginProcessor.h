@@ -85,21 +85,55 @@ public:
     void process(const float* samples, const int numSamples)
     {
         int index = 0;
-        while (index++ < numSamples)
+
+        if (state == State::waitingForTrigger)
         {
-            sampleCollecion.getWritePointer(0)[numCollected++] = *samples++;
-            if (numCollected == drawBuffer.getBufferSize())
+            while (index++ < numSamples)
             {
-                drawBuffer.push(sampleCollecion.getReadPointer(0), sampleCollecion.getNumSamples());
-                numCollected = 0;
+                const auto currentSample = *samples++;
+
+                if (currentSample >= triggerLevel && prevSample < triggerLevel)
+                {
+                    numCollected = 0;
+                    state = State::collecting;
+                    break;
+                }
+
+                prevSample = currentSample;
+            }
+        }
+
+        if (state == State::collecting)
+        {
+            while (index++ < numSamples)
+            {
+                sampleCollecion.getWritePointer(0)[numCollected++] = *samples++;
+
+                if (numCollected == drawBuffer.getBufferSize())
+                {
+                    drawBuffer.push(sampleCollecion.getReadPointer(0), sampleCollecion.getNumSamples());
+                    state = State::waitingForTrigger;
+                    prevSample = 100.0f;
+                    numCollected = 0;
+                    break;
+                }
             }
         }
     }
 
 private:
+    enum class State
+    {
+        waitingForTrigger,
+        collecting
+    };
+    State state{ State::waitingForTrigger };
+
     WaveDrawBuffer& drawBuffer;
     juce::AudioBuffer<float> sampleCollecion;
     int numCollected{ 0 };
+    float prevSample = 100.0f;
+    static constexpr float triggerLevel = 0.001f;
 };
 
 //==============================================================================

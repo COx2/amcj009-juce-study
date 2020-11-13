@@ -15,14 +15,26 @@ HelloAudioPluginAudioProcessorEditor::HelloAudioPluginAudioProcessorEditor (Hell
     , sliderGain(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
     , sliderFrequency(std::make_unique<juce::Slider>(juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow))
     , comboboxOscillator(std::make_unique<juce::ComboBox>())
+    , labelGain(std::make_unique<juce::Label>("Gain", "GAIN"))
+    , labelFrequency(std::make_unique<juce::Label>("Frequency", "FREQ"))
+    , labelOscillator(std::make_unique<juce::Label>("Oscillator", "OSC"))
 {
+    labelGain->attachToComponent(sliderGain.get(), false);
+    labelGain->setJustificationType(juce::Justification::centred);
+
     sliderAttachments.add(std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (audioProcessor.getProcessorState(), "Gain", *sliderGain));
     addAndMakeVisible(sliderGain.get());
 
+    labelFrequency->attachToComponent(sliderFrequency.get(), false);
+    labelFrequency->setJustificationType(juce::Justification::centred);
+
     sliderAttachments.add(std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (audioProcessor.getProcessorState(), "Frequency", *sliderFrequency));
     addAndMakeVisible(sliderFrequency.get());
+
+    labelOscillator->attachToComponent(comboboxOscillator.get(), false);
+    labelOscillator->setJustificationType(juce::Justification::centred);
 
     comboboxAttachments.add(std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>
         (audioProcessor.getProcessorState(),"Oscillator", *comboboxOscillator));
@@ -69,7 +81,7 @@ void HelloAudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
     const auto bounds = getLocalBounds();
 
     // Draw text
-    const juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.05f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
+    const juce::Rectangle<float> textArea = { bounds.getWidth() * 0.1f, bounds.getHeight() * 0.02f, bounds.getWidth() * 0.8f, bounds.getHeight() * 0.1f };
     g.setColour(juce::Colours::white);
     g.setFont(24.0f);
     g.drawFittedText("Hello Audio Plugin", textArea.toNearestInt(), juce::Justification::centred, 1);

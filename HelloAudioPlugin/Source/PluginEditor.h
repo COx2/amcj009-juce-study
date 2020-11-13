@@ -33,6 +33,9 @@ private:
     std::unique_ptr<juce::Slider> sliderGain;
     std::unique_ptr<juce::Slider> sliderFrequency;
     std::unique_ptr<juce::ComboBox> comboboxOscillator;
+    std::unique_ptr<juce::Label> labelGain;
+    std::unique_ptr<juce::Label> labelFrequency;
+    std::unique_ptr<juce::Label> labelOscillator;
 
     juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachments;
     juce::OwnedArray<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboboxAttachments;
