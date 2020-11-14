@@ -232,15 +232,43 @@ juce::AudioProcessorEditor* HelloAudioPluginAudioProcessor::createEditor()
 //==============================================================================
 void HelloAudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    // XMLフォーマットのオブジェクトを宣言する。
+    std::unique_ptr<juce::XmlElement> xml_state(new juce::XmlElement("HelloAudioPluginParameters"));
+    
+    {
+        juce::MemoryOutputStream mem(2048);
+        std::unique_ptr<juce::XmlElement> xml_elm(apvts.copyState().createXml());
+        xml_elm->writeTo(mem);
+        xml_state->setAttribute("ParameterState", mem.toUTF8());
+    }
+    
+    // XMLフォーマットのオブジェクトをバイナリデータ（外部ファイル）にコピーする。
+    copyXmlToBinary(*xml_state, destData);
 }
 
 void HelloAudioPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xml_state{ getXmlFromBinary(data, sizeInBytes) };
+    
+    const auto parameter_state_xml = xml_state->getStringAttribute("ParameterState");
+    if (parameter_state_xml.isNotEmpty())
+    {
+        if (const auto xml = juce::parseXML(parameter_state_xml))
+        {
+            const auto parameter_state_vt = juce::ValueTree::fromXml(*xml);
+            for (int idx = 0; idx < parameter_state_vt.getNumChildren(); idx++)
+            {
+                const auto param = parameter_state_vt.getChild(idx);
+                const auto param_id = param.getProperty("id");
+                const auto param_value = param.getProperty("value");
+
+                if (auto* juce_param = this->apvts.getParameter(param_id.toString()))
+                {
+                    juce_param->setValue(juce_param->convertTo0to1(param_value));
+                }
+            }
+        }
+    }
 }
 
 //==============================================================================
